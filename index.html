@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Supervision Ferme Avicole</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header>
+        <div>
+            <h1>Supervision Ferme Avicole</h1>
+            <p>Système de surveillance et de gestion automatique</p>
+        </div>
+
+        <div class="firebase-statut">
+            <span id="firebaseled"></span>
+            <span id="firebaseText">firebase...</span>
+        </div>
+    </header>
+
+
+    <!-- =====================================================
+         CONNEXION ESP32
+    ====================================================== -->
+
+    <section class="connection-panel">
+
+        <button id="connectBtn" class="btn primary">
+            Connecter
+        </button>
+
+        <div id="notSupported" class="warning">
+            Web Serial API non disponible dans ce navigateur.
+            Utilisez Google Chrome ou Microsoft Edge.
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         TABLEAU DE BORD
+    ====================================================== -->
+
+    <main>
+
+        <h2>État de la ferme</h2>
+
+        <div class="cards">
+
+            <!-- Température -->
+            <div class="card">
+                <div class="icon"></div>
+                <h3>Température</h3>
+                <div id="temp" class="value">
+                    -- <span class="unit">°C</span>
+                </div>
+            </div>
+
+
+            <!-- Humidité -->
+            <div class="card">
+                <div class="icon"></div>
+                <h3>Humidité</h3>
+                <div id="hum" class="value">
+                    -- <span class="unit">%</span>
+                </div>
+            </div>
+
+
+            <!-- Niveau aliment -->
+            <div class="card">
+                <div class="icon"></div>
+                <h3>Niveau aliment</h3>
+                <div id="silo" class="value">
+                    -- <span class="unit">cm</span>
+                </div>
+            </div>
+
+
+            <!-- Niveau eau -->
+            <div class="card">
+                <div class="icon"></div>
+                <h3>Niveau eau</h3>
+                <div id="water" class="value">
+                    --
+                </div>
+            </div>
+
+
+            <!-- Dernière distribution -->
+            <div class="card">
+                <div class="icon"></div>
+                <h3>Dernière distribution</h3>
+                <div id="feedAgo" class="value">
+                    -- <span class="unit">min</span>
+                </div>
+            </div>
+
+
+            <!-- Pompe -->
+            <div class="card">
+                <div class="icon"></div>
+                <h3>Pompe</h3>
+                <div id="pumpState" class="pill">
+                    OFF
+                </div>
+            </div>
+
+
+            <!-- Distribution -->
+            <div class="card">
+                <div class="icon"></div>
+                <h3>Distribution aliment</h3>
+                <div id="feedState" class="pill">
+                    Inactive
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             COMMANDES
+        ================================================== -->
+
+        <section class="control-section">
+
+            <h2>Commandes</h2>
+
+            <div class="controls">
+
+                <button
+                    class="btn success"
+                    data-cmd="PUMP_ON">
+                     Pompe ON
+                </button>
+
+                <button
+                    class="btn danger"
+                    data-cmd="PUMP_OFF">
+                     Pompe OFF
+                </button>
+
+                <button
+                    class="btn success"
+                    data-cmd="FEED">
+                     Distribuer aliment
+                </button>
+
+                <button
+                    class="btn warning-btn"
+                    data-cmd="FAN_ON">
+                     Ventilateur ON
+                </button>
+
+                <button
+                    class="btn danger"
+                    data-cmd="FAN_OFF">
+                     Ventilateur OFF
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PARAMÈTRES DISTRIBUTION
+        ================================================== -->
+
+        <section class="settings">
+
+            <h2>Paramètres</h2>
+
+            <div class="setting-row">
+
+                <label>
+                    Intervalle distribution
+                </label>
+
+                <input
+                    type="number"
+                    id="intervalInput"
+                    value="60"
+                    min="1">
+
+                <span>minutes</span>
+
+                <button
+                    id="applyInterval"
+                    class="btn primary">
+                    Appliquer
+                </button>
+
+            </div>
+
+
+            <div class="setting-row">
+
+                <label>
+                    Durée moteur
+                </label>
+
+                <input
+                    type="number"
+                    id="durationInput"
+                    value="5"
+                    min="1">
+
+                <span>secondes</span>
+
+                <button
+                    id="applyDuration"
+                    class="btn primary">
+                    Appliquer
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             JOURNAL
+        ================================================== -->
+
+        <section class="log-section">
+
+            <h2>Journal système</h2>
+
+            <div id="logBox" class="log-box"></div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         FIREBASE
+    ====================================================== -->
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+
+    <!-- =====================================================
+         JAVASCRIPT DU PROJET
+    ====================================================== -->
+
+    <script src="script.js"></script>
+
+</body>
+</html>
